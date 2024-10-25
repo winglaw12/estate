@@ -35,7 +35,7 @@ export default function OAuth() {
     }
 
   return (
-    // since 'OAuth' component is called inside a form, use type 'button' so that it will not submit the form
+    // since 'OAuth' component is called inside a form, use type 'button' so that it will not submit the form automatically
     <button 
         onClick={handleGoogleClick} 
         type='button' 
