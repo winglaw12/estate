@@ -1,28 +1,37 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import userReducer from './user/userSlice'
-import { persistReducer, persistStore } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import About from './pages/About';
+import Profile from './pages/Profile';
+import Header from './components/Header';
+import PrivateRoute from './components/PrivateRoute';
+import CreateListing from './pages/CreateListing';
+import UpdateListing from './pages/UpdateListing';
+import Listing from './pages/Listing';
+import Search from './pages/Search';
 
-// combine the reducers then use persist function
-const rootReducer = combineReducers({
-  // only have 1 reducer as of now
-  user: userReducer
-})
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/sign-in' element={<SignIn />} />
+        <Route path='/sign-up' element={<SignUp />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/search' element={<Search />} />
+        <Route path='/listing/:listingId' element={<Listing />} />
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  version: 1,
+        <Route element={<PrivateRoute />}>
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/create-listing' element={<CreateListing />} />
+          <Route
+            path='/update-listing/:listingId'
+            element={<UpdateListing />}
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
-export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-        serializableCheck: false,
-    }),
-})
-
-export  const persistor = persistStore(store)
